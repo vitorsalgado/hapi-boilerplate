@@ -20,7 +20,7 @@ const server = new Server({
 	cache: [{ name: 'redisCache', engine: CatboxRedis, url: Config.redis.uri, partition: 'cache' }]
 });
 
-server.connection({ host: Config.server.host, port: Config.server.port, labels: ['api'] });
+server.connection({ port: Config.server.port, labels: ['api'] });
 server.register(Plugins.load());
 server.auth.strategy('hawk', 'hawk', { getCredentialsFunc: HawkAuthStrategy.getCredentials });
 

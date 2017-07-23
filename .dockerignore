@@ -1,6 +1,11 @@
+docs
 node_modules
+envs
 .env
+.eslintrc
+.gitignore
+.travis.yml
 CHANGELOG.md
+cli.js
 LICENSE
 README.md
-.travis.yml
