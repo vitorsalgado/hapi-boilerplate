@@ -1,6 +1,6 @@
 'use strict';
 
-function Compose (error) {
+function Err (error) {
 	const self = this;
 
 	self.error = error;
@@ -44,4 +44,4 @@ function Compose (error) {
 	};
 }
 
-module.exports = (error) => new Compose(error);
+module.exports.err = (error) => new Err(error);
