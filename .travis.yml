@@ -36,11 +36,7 @@ after_success:
   - docker push $TRAVIS_REPO_SLUG:$TAG
   - docker push $TRAVIS_REPO_SLUG:$APPLICATION_VERSION
 
-  - 'if [ $TRAVIS_PULL_REQUEST != "false" -o $TRAVIS_BRANCH != "master" ]
-    then
-        echo "Skipping deployment on branch=$TRAVIS_BRANCH, PR=$TRAVIS_PULL_REQUEST"
-        exit 0;
-    fi'
+  - if [ $TRAVIS_PULL_REQUEST != "false" -o $TRAVIS_BRANCH != "master" ]; then echo "Skipping deployment on branch=$TRAVIS_BRANCH, PR=$TRAVIS_PULL_REQUEST" && exit 0 ; fi
 
   # deploying to Heroku cloud
 
@@ -55,13 +51,7 @@ after_success:
 
   # notifications
 
-  - 'if [ $SLACK_NOTIFY != "false" ]
-    then
-      node cli slack-notify-success "Hapi Boilerplate ${APPLICATION_VERSION} succesfully deployed" $SLACK_WEBHOOK $APPLICATION_VERSION
-    fi'
+  - if [ $SLACK_NOTIFY != "false" ]; then node cli slack-notify-success "Hapi Boilerplate ${APPLICATION_VERSION} succesfully deployed" $SLACK_WEBHOOK $APPLICATION_VERSION ; fi
 
 after_failure:
-  - 'if [ $SLACK_NOTIFY != "false" ]
-    then
-      node cli slack-notify-error "Hapi Boilerplate deployment failed!" $SLACK_WEBHOOK
-    fi'
+  - if [ $SLACK_NOTIFY != "false" ]; then node cli slack-notify-error "Hapi Boilerplate deployment failed!" $SLACK_WEBHOOK ; fi

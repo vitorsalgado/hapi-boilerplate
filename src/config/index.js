@@ -25,7 +25,7 @@ let confs = {
 	},
 
 	redis: {
-		uri: process.env.REDIS_URI
+		uri: process.env.REDIS_URL
 	},
 
 	facebook: {
