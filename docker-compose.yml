@@ -1,0 +1,16 @@
+version: '2'
+services:
+
+  api:
+    build:
+      context: ./
+    container_name: development_api
+    ports:
+      - 3000:3000
+    env_file: api.env
+
+  mongo:
+    image: mongo
+
+  redis:
+    image: redis

@@ -1,0 +1,6 @@
+node_modules
+.env
+CHANGELOG.md
+LICENSE
+README.md
+.travis.yml
