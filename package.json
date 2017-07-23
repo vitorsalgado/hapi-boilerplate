@@ -8,8 +8,8 @@
     "start-docker": "pm2-docker ecosystem.config.js --no-daemon -raw",
     "start-dev": "nodemon --ignore envs/ --ignore __tests__/ --ignore docs/",
     "dev": "npm run start-dev",
-    "test": "jest",
-    "test-watch": "jest --watch",
+    "test": "jest --coverage",
+    "test-watch": "jest --watch -o",
     "test-acceptance": "yarn start && yarn ./__test/acceptance_tests",
     "lint": "eslint ./src ./__tests__",
     "security-checkup": "snyk test && mkdir -p reports/nsp && nsp check --output summary | cat > reports/nsp/summary.txt",
@@ -80,7 +80,6 @@
   },
   "jest": {
     "notify": false,
-    "collectCoverage": true,
     "coverageDirectory": "reports/coverage",
     "clearMocks": true,
     "testEnvironment": "node",

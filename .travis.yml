@@ -51,7 +51,7 @@ after_success:
 
   # notifications
 
-  - if [ $SLACK_NOTIFY != "false" ]; then node cli slack-notify-success "Hapi Boilerplate ${APPLICATION_VERSION} succesfully deployed" $SLACK_WEBHOOK $APPLICATION_VERSION ; fi
+  - if [ $SLACK_NOTIFY != "false" ]; then node cli slack-notify-success "Hapi Boilerplate ${APPLICATION_VERSION} *succesfully* deployed!" $SLACK_WEBHOOK $APPLICATION_VERSION ; fi
 
 after_failure:
-  - if [ $SLACK_NOTIFY != "false" ]; then node cli slack-notify-error "Hapi Boilerplate deployment failed!" $SLACK_WEBHOOK ; fi
+  - if [ $SLACK_NOTIFY != "false" ]; then node cli slack-notify-error "Hapi Boilerplate deployment *FAILED*!" $SLACK_WEBHOOK ; fi
