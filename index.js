@@ -2,14 +2,12 @@
 
 require('dotenv').config();
 
-const FileSystem = require('fs');
-const Path = require('path');
 const Server = require('./src/server');
 const MongoDB = require('./src/libs/mongoDB');
 
 let Config = require('./src/config');
 const Logger = require('./src/libs/logger');
-const ConfigValidator = require('./src/config/schema');
+const ConfigSchema = require('./src/config/schema');
 
 const restInPeace = () =>
 	Server.get().root.stop({ timeout: Config.server.stopTimeout }, (err) =>
@@ -29,9 +27,16 @@ const restInPeace = () =>
 process.on('SIGTERM', restInPeace);
 process.on('SIGINT', restInPeace);
 
-const banner = FileSystem.readFileSync(Path.join(__dirname, './banner.txt'));
+Logger.debug(`
+    __  __            _    ____        _ __                __      __
+   / / / /___ _____  (_)  / __ )____  (_) /__  _________  / /___ _/ /____
+  / /_/ / __ \`/ __ \\/ /  / __  / __ \\/ / / _ \\/ ___/ __ \\/ / __ \`/ __/ _ \\
+ / __  / /_/ / /_/ / /  / /_/ / /_/ / / /  __/ /  / /_/ / / /_/ / /_/  __/
+/_/ /_/\\__,_/ .___/_/  /_____/\\____/_/_/\\___/_/  / .___/_/\\__,_/\\__/\\___/
+           /_/                                  /_/
 
-Logger.debug(banner.toString());
+`
+);
 
 Logger.debug(`Version:	${Config.version}`);
 Logger.debug(`Env:		${Config.environment}`);
@@ -41,7 +46,7 @@ Logger.debug('');
 
 Promise.all(
 	[
-		ConfigValidator.validate(Config),
+		ConfigSchema.ensure(Config),
 		MongoDB.connect(),
 		Server.start()
 	])

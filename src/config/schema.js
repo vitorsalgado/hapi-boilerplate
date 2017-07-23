@@ -2,7 +2,7 @@
 
 const Joi = require('joi');
 
-module.exports = Joi.object(
+module.exports.schema = Joi.object(
 	{
 		version: Joi.string().required(),
 		environment: Joi.string().description('Runtime environment'),
@@ -34,3 +34,5 @@ module.exports = Joi.object(
 		}
 	})
 	.options({ abortEarly: false });
+
+module.exports.ensure = (config) => Joi.attempt(config, exports.schema);

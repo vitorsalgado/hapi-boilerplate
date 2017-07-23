@@ -12,10 +12,12 @@ before_script:
   - snyk protect
 
 after_script:
-  - codeclimate-test-reporter < coverage/lcov.info
+  - codeclimate-test-reporter < reports/coverage/lcov.info
   - snyk monitor
+  - yarn coveralls
 
-  # Docker Hub Deploy
+after_success:
+  # Docker
 
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
@@ -37,7 +39,7 @@ after_script:
         exit 0;
     fi
 
-  # Heroku Deploy
+  # Heroku
 
   - wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
 

@@ -1,8 +1,6 @@
 'use strict';
 
-const Joi = require('joi');
 const Package = require('../../package.json');
-const ConfigSchema = require('./schema');
 
 let confs = {
 	version: Package.version,
@@ -32,8 +30,8 @@ let confs = {
 	},
 
 	facebook: {
-		graphAPIUri: process.env.HB_FACEBOOK_GRAPH_API_URI
+		graphAPIUri: 'https://graph.facebook.com/v2.10'
 	}
 };
 
-module.exports = confs = confs.isTest ? confs : Joi.attempt(confs, ConfigSchema);
+module.exports = confs;

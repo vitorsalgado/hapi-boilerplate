@@ -17,7 +17,7 @@ const acceptHeaderRegex = new RegExp(`^application/vnd.${Config.namespace}.(v[a-
 
 const server = new Server({
 	connections: { compression: false },
-	cache: [{ name: 'redisCache', engine: CatboxRedis, host: Config.redis.uri, partition: 'cache' }]
+	cache: [{ name: 'redisCache', engine: CatboxRedis, url: Config.redis.uri, partition: 'cache' }]
 });
 
 server.connection({ host: Config.server.host, port: Config.server.port, labels: ['api'] });
