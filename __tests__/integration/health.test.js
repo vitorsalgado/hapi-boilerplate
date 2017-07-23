@@ -14,7 +14,8 @@ describe('Health', () => {
 
 	it('should return ok', () => {
 		return Supertest(Server.get().listener).get('/health')
-			.expect(200, ({ body }) => {
+			.expect(({ statusCode, body }) => {
+				expect(statusCode).toEqual(200);
 				expect(body.status).toEqual('OK');
 			});
 	});
