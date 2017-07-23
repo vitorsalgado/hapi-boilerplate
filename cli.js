@@ -95,9 +95,9 @@ Program
 						mrkdwn: true,
 						attachments: [
 							{
-								pretext: `>Details for *${version}*\n${process.env.TRAVIS_COMMIT_MESSAGE}`,
+								pretext: `>Commit: ${process.env.TRAVIS_COMMIT_MESSAGE}`,
 								color: 'good',
-								title: `Build: ${process.env.TRAVIS_BUILD_NUMBER} By: ${process.env.USER}`,
+								title: `Build: ${process.env.TRAVIS_BUILD_NUMBER} >> By: ${process.env.USER}`,
 								title_link: `https://travis-ci.org/vitorsalgado/hapi-boilerplate/builds/${process.env.TRAVIS_BUILD_ID}`,
 								mrkdwn_in: ['text', 'pretext'],
 								text: data.toString()
@@ -105,8 +105,7 @@ Program
 							{
 								color: '#4285F4',
 								title: 'Heroku Application',
-								title_link: 'https://hapi-boilerplate.herokuapp.com/docs',
-								text: 'Navigate to application deployed on Heroku Cloud'
+								title_link: 'https://hapi-boilerplate.herokuapp.com/docs'
 							}
 						]
 					},
@@ -129,9 +128,8 @@ Program
 					attachments: [
 						{
 							color: 'danger',
-							pretext: `>${process.env.TRAVIS_COMMIT_MESSAGE}`,
-							text: 'Something went wrong during the last deployment!.\nNavigate with the link for more details.',
-							title: `Build: ${process.env.TRAVIS_BUILD_NUMBER} > By: ${process.env.USER}`,
+							text: `*Commit*: ${process.env.TRAVIS_COMMIT_MESSAGE}\nSomething went wrong during the last deployment!.\nNavigate with the link for more details.`,
+							title: `Build: ${process.env.TRAVIS_BUILD_NUMBER} >> By: ${process.env.USER}`,
 							title_link: `https://travis-ci.org/vitorsalgado/hapi-boilerplate/builds/${process.env.TRAVIS_BUILD_ID}`,
 							mrkdwn_in: ['text', 'pretext']
 						},
