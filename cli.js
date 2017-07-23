@@ -81,4 +81,4 @@ Program
 			.then()
 	);
 
-Program.log(argv);
+Program.parse(argv);
