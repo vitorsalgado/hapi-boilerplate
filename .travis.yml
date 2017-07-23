@@ -8,15 +8,18 @@ services:
 cache: yarn
 
 before_script:
+  # Security checkup
+
   - snyk auth ${SNYK_TOKEN} -d
   - snyk protect
-
-after_script:
-  - codeclimate-test-reporter < reports/coverage/lcov.info
   - snyk monitor
-  - yarn coveralls
 
 after_success:
+  # Coverage reports
+
+  - codeclimate-test-reporter < reports/coverage/lcov.info
+  - yarn coveralls
+
   # Docker
 
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
@@ -25,7 +28,7 @@ after_success:
   - DOCKER_IMAGE=hapi-boilerplate
   - TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
 
-  - docker build -t $DOCKER_IMAGE .
+  - docker build --build-arg HB_PORT=$HB_PORT -t $DOCKER_IMAGE .
 
   - docker tag $DOCKER_IMAGE $TRAVIS_REPO_SLUG:$TAG
   - docker tag $DOCKER_IMAGE $TRAVIS_REPO_SLUG:$APPLICATION_VERSION
@@ -42,6 +45,7 @@ after_success:
   # Heroku
 
   - wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+  - heroku plugins:install heroku-container-registry
 
   - docker login --email=_ --username=_ --password=$HEROKU_API_KEY registry.heroku.com
   - docker tag $DOCKER_IMAGE registry.heroku.com/$HEROKU_APPLICATION/web
