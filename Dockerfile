@@ -5,7 +5,7 @@ WORKDIR /api
 COPY package.json yarn.lock ./
 
 RUN mkdir -p logs && \
-    chmod -R 777 logs && \
+    chmod -R 757 logs && \
     yarn install --production
 
 COPY . .

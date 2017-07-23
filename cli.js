@@ -82,7 +82,7 @@ Program
 
 Program
 	.command('slack-notify-success [title] [webhook] [version]')
-	.description('Sends a message to Slack notifiying the success')
+	.description('sends a message to Slack notifiying the success')
 	.action((title, webhook, version) =>
 		exec('node cli changelog', (err, data) => err
 			? console.log(err)
@@ -95,9 +95,9 @@ Program
 						mrkdwn: true,
 						attachments: [
 							{
-								pretext: `>*Commit*: ${process.env.TRAVIS_COMMIT_MESSAGE}\n*Triggered by: ${process.env.TRAVIS_EVENT_TYPE}`,
+								pretext: `>*Commit*: ${process.env.TRAVIS_COMMIT_MESSAGE}\n>*Triggered by*: ${process.env.TRAVIS_EVENT_TYPE}`,
 								color: 'good',
-								title: `Build: ${process.env.TRAVIS_BUILD_NUMBER} >> By: ${process.env.USER} >> Branch: ${process.env.TRAVIS_BRANCH}`,
+								title: `Build: ${process.env.TRAVIS_BUILD_NUMBER} | By: ${process.env.USER} | Branch: ${process.env.TRAVIS_BRANCH}`,
 								title_link: `https://travis-ci.org/vitorsalgado/hapi-boilerplate/builds/${process.env.TRAVIS_BUILD_ID}`,
 								mrkdwn_in: ['text', 'pretext'],
 								text: data.toString()
@@ -116,7 +116,7 @@ Program
 
 Program
 	.command('slack-notify-error [title] [webhook]')
-	.description('Sends a message to Slack notifiying the success')
+	.description('sends a message to Slack notifying the error')
 	.action((title, webhook, version) =>
 		Request(
 			{
@@ -129,7 +129,7 @@ Program
 						{
 							color: 'danger',
 							text: `*Commit*: ${process.env.TRAVIS_COMMIT_MESSAGE}\nSomething went wrong during the last deployment!.\nNavigate with the link for more details.`,
-							title: `Build: ${process.env.TRAVIS_BUILD_NUMBER} >> By: ${process.env.USER} >> Branch: ${process.env.TRAVIS_BRANCH}`,
+							title: `Build: ${process.env.TRAVIS_BUILD_NUMBER} | By: ${process.env.USER} | Branch: ${process.env.TRAVIS_BRANCH}`,
 							title_link: `https://travis-ci.org/vitorsalgado/hapi-boilerplate/builds/${process.env.TRAVIS_BUILD_ID}`,
 							mrkdwn_in: ['text', 'pretext']
 						},
