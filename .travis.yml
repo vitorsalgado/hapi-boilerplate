@@ -28,7 +28,7 @@ after_success:
   - DOCKER_IMAGE=hapi-boilerplate
   - TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo $TRAVIS_BRANCH ; fi`
 
-  - docker build --build-arg HB_PORT=$HB_PORT -t $DOCKER_IMAGE .
+  - docker build -t $DOCKER_IMAGE .
 
   - docker tag $DOCKER_IMAGE $TRAVIS_REPO_SLUG:$TAG
   - docker tag $DOCKER_IMAGE $TRAVIS_REPO_SLUG:$APPLICATION_VERSION

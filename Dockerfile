@@ -12,6 +12,6 @@ COPY . .
 
 USER node
 
-EXPOSE $HB_PORT
+EXPOSE 3000
 
 CMD npm start-docker
