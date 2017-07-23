@@ -8,19 +8,19 @@ services:
 cache: yarn
 
 before_script:
-  # Security checkup
+  # security checkups
 
   - snyk auth ${SNYK_TOKEN} -d
   - snyk protect
   - snyk monitor
 
 after_success:
-  # Coverage reports
+  # publishing coverage reports
 
   - codeclimate-test-reporter < reports/coverage/lcov.info
   - yarn coveralls
 
-  # Docker
+  # building and publishing docker
 
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
@@ -42,7 +42,7 @@ after_success:
         exit 0;
     fi
 
-  # Heroku
+  # deploying to Heroku cloud
 
   - wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh
   - heroku plugins:install heroku-container-registry
@@ -53,4 +53,15 @@ after_success:
 
   - heroku ps:scale web=1 -a $HEROKU_APPLICATION
 
-  - node cli slack-notify-success
+  # notifications
+
+  - if [ $SLACK_NOTIFY != "false" ]
+    then
+      node cli slack-notify-success "Hapi Boilerplate ${APPLICATION_VERSION} succesfully deployed" $SLACK_WEBHOOK $APPLICATION_VERSION
+    fi
+
+after_failure:
+  - if [ $SLACK_NOTIFY != "false" ]
+    then
+      node cli slack-notify-error "Hapi Boilerplate deployment failed!" $SLACK_WEBHOOK
+    fi

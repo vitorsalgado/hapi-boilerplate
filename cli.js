@@ -37,7 +37,7 @@ Program
 
 Program
 	.command('changelog')
-	.description('get changelog entry for latest version')
+	.description('get changelog entry for latest version and parse to Slack Markdown format')
 	.action(() => {
 		const inputStream = FileSystem.createReadStream(Path.resolve('./CHANGELOG.md'));
 		const readInterface = Readline.createInterface(inputStream, new Stream());
@@ -47,12 +47,14 @@ Program
 		let lineIndex = 0;
 
 		readInterface.on('line', (line) => {
+			let parsedLine = '';
+
 			if (line === '') {
 				emptySpacesFound++;
 			}
 
 			if (emptySpacesFound >= 2) {
-				readInterface.close();
+				return readInterface.close();
 			}
 
 			if (lineIndex === 2) {
@@ -63,7 +65,15 @@ Program
 				}
 			}
 
-			latestChangelog += `${line}\n`;
+			if (lineIndex === 0 || lineIndex === 2) {
+				parsedLine = `*${line.replace('## ', '').replace('# ', '')}*\n`;
+			} else if (lineIndex >= 3 && line !== '') {
+				parsedLine = `${line.replace('*', '•')}\n`;
+			} else {
+				parsedLine = `${line}\n`;
+			}
+
+			latestChangelog += parsedLine;
 			lineIndex++;
 		});
 
@@ -71,28 +81,31 @@ Program
 	});
 
 Program
-	.command('slack-notify-success')
-	.description('')
-	.option('--webhook [webhook]', 'Slack WebHook')
-	.option('--title [title]', 'Message title')
-	.action(() =>
+	.command('slack-notify-success [title] [webhook] [version]')
+	.description('Sends a message to Slack notifiying the success')
+	.action((title, webhook, version) =>
 		exec('node cli changelog', (err, data) => err
 			? console.log(err)
 			: Request(
 				{
-					uri: Program.webhook,
+					uri: webhook,
 					method: 'POST',
 					body: {
-						text: Program.title,
+						text: title,
 						mrkdwn: true,
 						attachments: [
 							{
-								author_name: process.env.USER,
-								color: 'success',
-								title: `#${process.env.TRAVIS_BUILD_NUMBER}:${process.env.TRAVIS_COMMIT_MESSAGE}`,
+								pretext: `>Details for ${version}`,
+								color: 'good',
+								title: `#${process.env.TRAVIS_BUILD_NUMBER}:${process.env.USER}:${process.env.TRAVIS_COMMIT_MESSAGE}`,
 								title_link: `https://travis-ci.org/vitorsalgado/hapi-boilerplate/builds/${process.env.TRAVIS_BUILD_ID}`,
 								mrkdwn_in: ['text', 'pretext'],
 								text: data.toString()
+							},
+							{
+								color: '#439FE0',
+								title: 'Heroku Application',
+								title_link: 'https://hapi-boilerplate.herokuapp.com/'
 							}
 						]
 					},
@@ -100,5 +113,34 @@ Program
 				})
 				.catch(console.error))
 	);
+
+Program
+	.command('slack-notify-error [title] [webhook]')
+	.description('Sends a message to Slack notifiying the success')
+	.action((title, webhook, version) =>
+		Request(
+			{
+				uri: webhook,
+				method: 'POST',
+				body: {
+					text: title,
+					mrkdwn: true,
+					attachments: [
+						{
+							color: 'danger',
+							pretext: '>Something went wrong during the last deployment. Navigate with the link for more details.',
+							title: `#${process.env.TRAVIS_BUILD_NUMBER}:${process.env.USER}:${process.env.TRAVIS_COMMIT_MESSAGE}`,
+							title_link: `https://travis-ci.org/vitorsalgado/hapi-boilerplate/builds/${process.env.TRAVIS_BUILD_ID}`,
+							mrkdwn_in: ['text', 'pretext']
+						},
+						{
+							color: 'warning',
+							title: `Test Result: ${process.env.TRAVIS_TEST_RESULT}`
+						}
+					]
+				},
+				json: true
+			})
+			.catch(console.error));
 
 Program.parse(argv);
