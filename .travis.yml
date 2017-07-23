@@ -52,3 +52,5 @@ after_success:
   - docker push registry.heroku.com/$HEROKU_APPLICATION/web
 
   - heroku ps:scale web=1 -a $HEROKU_APPLICATION
+
+  - node cli slack-notify-success
