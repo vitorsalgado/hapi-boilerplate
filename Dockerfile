@@ -12,4 +12,4 @@ COPY . .
 
 USER node
 
-CMD npm start-docker
+CMD npm run start-docker
