@@ -13,7 +13,7 @@ module.exports.buildNotes = function (...codes) {
 
 	codes.forEach((code) => {
 
-		str += `${code}: ${AppErrors.getMessage(code)}<br/>`;
+		str += `${code}<br/>`;
 	});
 
 	return str;

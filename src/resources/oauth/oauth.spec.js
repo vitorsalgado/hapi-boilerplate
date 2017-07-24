@@ -2,6 +2,6 @@
 
 describe('OAuth Resource', () => {
 	it('', () => {
-		
+
 	});
 });

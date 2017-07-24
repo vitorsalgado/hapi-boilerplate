@@ -8,7 +8,7 @@ module.exports = {
 		{
 			name: 'hapi-boilerplate',
 			script: 'index.js',
-			instances: 0,
+			instances: 1,
 			exec_mode: 'cluster',
 			restart_delay: 10000,
 			error_file: Config.isProduction ? './logs/error.log' : '/dev/null',

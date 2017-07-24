@@ -11,8 +11,14 @@ before_script:
   # security checkups
 
   - snyk auth ${SNYK_TOKEN} -d
+
+  - yarn security-checkup
+
   - snyk protect
   - snyk monitor
+
+  # lint
+  - yarn lint
 
 after_success:
   # publishing coverage reports

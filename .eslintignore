@@ -1,0 +1,4 @@
+__tests__/acceptance/
+node_modules/
+docs/
+envs/

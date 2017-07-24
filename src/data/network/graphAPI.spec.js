@@ -4,7 +4,7 @@ const GraphAPI = require('./graphAPI');
 const HttpClient = require('../../libs/httpClient');
 
 describe('Graph API', () => {
-	it('should', () => {
+	it('should return facebook user', () => {
 		const fbUser = { id: '1233456789', name: 'Vitor Hugo Salgado' };
 
 		HttpClient.getJSON = jest.fn()

@@ -2,7 +2,7 @@
 
 const Package = require('../../package.json');
 
-let confs = {
+module.exports = {
 	version: Package.version,
 	environment: process.env.NODE_ENV,
 	namespace: 'br.com.hapiboilerplate',
@@ -32,5 +32,3 @@ let confs = {
 		graphAPIUri: 'https://graph.facebook.com/v2.10'
 	}
 };
-
-module.exports = confs;
