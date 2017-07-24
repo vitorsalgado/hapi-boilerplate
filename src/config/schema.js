@@ -12,7 +12,6 @@ module.exports.schema = Joi.object(
 
 		server: {
 			port: Joi.number().required(),
-			host: Joi.string().required(),
 			showDocumentation: Joi.boolean().default(false).description('Show swagger and error documentations'),
 			showStackErr: Joi.boolean().default(false).description('Outputs "details" field with stack trace in error responses'),
 			stopTimeout: Joi.number().required().description('Server stop timeout')
