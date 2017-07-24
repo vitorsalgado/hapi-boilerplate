@@ -13,8 +13,6 @@ before_script:
   - snyk auth ${SNYK_TOKEN} -d
 
   - yarn security-checkup
-
-  - snyk protect
   - snyk monitor
 
   # lint

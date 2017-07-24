@@ -12,7 +12,7 @@
     "test-watch": "jest --watch -o",
     "test-acceptance": "yarn start && yarn ./__test/acceptance_tests",
     "lint": "eslint ./src ./__tests__",
-    "security-checkup": "snyk test && mkdir -p reports/nsp && nsp check --output summary | cat > reports/nsp/summary.txt",
+    "security-checkup": "snyk protect && mkdir -p reports/nsp && nsp check --output summary | cat > reports/nsp/summary.txt",
     "coveralls": "cat reports/coverage/lcov.info | ./node_modules/.bin/coveralls"
   },
   "engines": {
