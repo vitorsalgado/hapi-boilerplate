@@ -1,6 +1,6 @@
 {
   "name": "hapi-boilerplate",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Hapi boilerplate project",
   "main": "index.js",
   "scripts": {
