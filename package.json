@@ -1,11 +1,11 @@
 {
   "name": "hapi-boilerplate",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "Hapi boilerplate project",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "start-docker": "pm2-docker ecosystem.config.js --no-daemon -raw",
+    "start": "pm2 start ecosystem.config.js --no-daemon",
+    "start-docker": "pm2-docker ecosystem.config.js --no-daemon",
     "start-dev": "nodemon --ignore envs/ --ignore __tests__/ --ignore docs/",
     "dev": "npm run start-dev",
     "test": "jest --coverage",

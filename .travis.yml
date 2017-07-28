@@ -24,6 +24,8 @@ after_success:
   - codeclimate-test-reporter < reports/coverage/lcov.info
   - yarn coveralls
 
+  - if [ $TRAVIS_PULL_REQUEST != "false" -o $TRAVIS_BRANCH != "master" ]; then echo "Skipping deployment on branch=$TRAVIS_BRANCH, PR=$TRAVIS_PULL_REQUEST" && exit 0 ; fi
+
   # building and publishing docker
 
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
@@ -39,8 +41,6 @@ after_success:
 
   - docker push $TRAVIS_REPO_SLUG:$TAG
   - docker push $TRAVIS_REPO_SLUG:$APPLICATION_VERSION
-
-  - if [ $TRAVIS_PULL_REQUEST != "false" -o $TRAVIS_BRANCH != "master" ]; then echo "Skipping deployment on branch=$TRAVIS_BRANCH, PR=$TRAVIS_PULL_REQUEST" && exit 0 ; fi
 
   # deploying to Heroku cloud
 

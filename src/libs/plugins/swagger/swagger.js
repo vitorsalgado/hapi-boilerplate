@@ -7,17 +7,14 @@ module.exports = {
 	register: HapiSwaggered,
 	options: {
 		tags: [
-			{
-				name: 'api',
-				description: 'API Endpoints'
-			},
+			{ name: 'api' },
 			{
 				name: 'system',
-				description: 'System utilities'
+				description: 'System Utilities'
 			},
 			{
 				name: 'oauth',
-				description: 'Authentication / Authorization'
+				description: 'OAuth'
 			}
 		],
 		tagging: {

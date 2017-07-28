@@ -15,7 +15,7 @@ const colors = {
 	default: '\x1b[0m'
 };
 
-let debugFunc = () => {};
+let debugFunc = () => { /* the default for production environments is do nothing */ };
 
 if (!Config.isProduction) {
 	debugFunc = (data) => console.log(`${colors.green}${data}${colors.default}`);
@@ -28,7 +28,7 @@ module.exports.info = (data) => console.log(`${colors.cyan}${Parser.log(data)}${
 module.exports.error =
 	module.exports.warn =
 		(data) => {
-			const log = defs(data);
+			const log = setCommonFields(data);
 
 			console.error(`${colors.red}${Parser.parse(log)}${colors.default}`);
 
@@ -59,7 +59,7 @@ module.exports.buildHttpErr = (request, response) => {
 	};
 };
 
-const defs = (data) => {
+const setCommonFields = (data) => {
 	let d = Object.assign({}, data);
 
 	if (data instanceof Error) {
@@ -67,7 +67,7 @@ const defs = (data) => {
 	}
 
 	d.traceID = UUID.v4();
-	d.createdAt = Moment().format('YYYY-MM-DD HH:mm:ss');
+	d.createdAt = Moment().format('DD-MM-YYYY HH:mm:ss');
 
 	d.server = {
 		version: Config.version,

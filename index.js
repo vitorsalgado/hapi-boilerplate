@@ -5,11 +5,11 @@ require('dotenv').config();
 const Server = require('./src/server');
 const MongoDB = require('./src/libs/mongoDB');
 
-let Config = require('./src/config');
+const Config = require('./src/config');
 const Logger = require('./src/libs/logger');
 const ConfigSchema = require('./src/config/schema');
 
-const restInPeace = () =>
+function restInPeace () {
 	Server.get().root.stop({ timeout: Config.server.stopTimeout }, (err) =>
 		MongoDB.disconnect()
 			.then(() => {
@@ -23,6 +23,7 @@ const restInPeace = () =>
 				Logger.error(err);
 				process.exit(1);
 			}));
+}
 
 process.on('SIGTERM', restInPeace);
 process.on('SIGINT', restInPeace);
@@ -51,12 +52,11 @@ Promise.all(
 		Server.start()
 	])
 	.then(() => {
-		Logger.debug('API is online and waiting for requests ...\n');
+		Logger.debug('API is online and waiting for requests ...');
 	})
 	.catch((err) => {
 		Logger.debug('Fatal exception on startup! Server will finish ...');
 		Logger.error(err);
 
-		process.removeListener(restInPeace);
 		process.exit(-1);
 	});
