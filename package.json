@@ -39,7 +39,6 @@
   "homepage": "https://github.com/vitorsalgado/hapi-boilerplate#readme",
   "dependencies": {
     "boom": "^5.2.0",
-    "carrier": "^0.3.0",
     "catbox": "^7.1.5",
     "catbox-redis": "^3.0.2",
     "dotenv": "^4.0.0",
@@ -54,7 +53,6 @@
     "joi": "^10.6.0",
     "moment": "^2.18.1",
     "mongoose": "^4.11.3",
-    "nsp": "^2.6.3",
     "pm2": "^2.6.1",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
@@ -76,6 +74,7 @@
     "eslint-plugin-security": "^1.4.0",
     "eslint-plugin-standard": "^3.0.1",
     "jest": "^20.0.4",
+    "nsp": "^2.7.0",
     "snyk": "^1.36.2",
     "supertest": "^3.0.0"
   },
