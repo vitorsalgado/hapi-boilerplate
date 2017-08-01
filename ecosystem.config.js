@@ -1,7 +1,5 @@
 'use strict';
 
-const Config = require('./src/config');
-
 module.exports = {
 	apps: [
 		{

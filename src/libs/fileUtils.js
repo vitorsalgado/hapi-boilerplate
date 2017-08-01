@@ -4,7 +4,7 @@
 
 const FileSystem = require('fs');
 
-const readDirRecursively = (dir, predicate) => {
+const readDirRecursiveSync = (dir, predicate) => {
 	let results = [];
 	const directories = FileSystem.readdirSync(dir);
 
@@ -15,7 +15,7 @@ const readDirRecursively = (dir, predicate) => {
 		const stat = FileSystem.statSync(file);
 
 		if (stat && stat.isDirectory()) {
-			results = results.concat(readDirRecursively(file, predicate));
+			results = results.concat(readDirRecursiveSync(file, predicate));
 		} else if (predicate(file)) {
 			results.push(require(file));
 		}
@@ -24,4 +24,4 @@ const readDirRecursively = (dir, predicate) => {
 	return results;
 };
 
-module.exports.readDirRecursively = readDirRecursively;
+module.exports.readDirRecursiveSync = readDirRecursiveSync;

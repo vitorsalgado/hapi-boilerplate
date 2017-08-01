@@ -18,7 +18,7 @@ const colors = {
 let debugFunc = () => { /* the default for production environments is do nothing */ };
 
 if (!Config.isProduction) {
-	debugFunc = (data) => console.log(`${colors.green}${data}${colors.default}`);
+	debugFunc = (data) => console.log(`${colors.green}${data || ''}${colors.default}`);
 }
 
 module.exports.debug = debugFunc;

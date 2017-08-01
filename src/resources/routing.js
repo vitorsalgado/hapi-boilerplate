@@ -11,7 +11,7 @@ const { handleByVersion } = require('../libs/routeUtils');
 const ROUTES_PATH = Path.join(__dirname);
 
 module.exports.setUpRoutes = () =>
-	FileUtils.readDirRecursively(ROUTES_PATH, (file) => file.indexOf('.routes.js') > -1)
+	FileUtils.readDirRecursiveSync(ROUTES_PATH, (file) => file.indexOf('.routes.js') > -1)
 		.map((module) => module.bind({ handleByVersion })())
 		.reduce((a, b) => a.concat(b))
 		.map((routeSpec) => routeSpec.route)

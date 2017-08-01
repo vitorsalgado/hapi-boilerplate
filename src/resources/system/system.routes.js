@@ -1,7 +1,7 @@
 'use strict';
 
-const Joi = require('joi');
-const Config = require('../../config');
+const Schemas = require('./system.schemas');
+const Controller = require('./system.controller');
 
 module.exports = function () {
 	return [
@@ -13,21 +13,24 @@ module.exports = function () {
 					tags: ['api', 'system'],
 					auth: false,
 					description: 'API health check',
-					handler: function (request, reply) {
-						return reply({
-							status: 'OK',
-							version: Config.version,
-							env: Config.environment
-						});
-					},
+					handler: Controller.healthCheck,
 					response: {
-						status: {
-							200: Joi.object({
-								status: Joi.string(),
-								version: Joi.string(),
-								env: Joi.string()
-							})
-						}
+						status: { 200: Schemas.healthCheck }
+					}
+				}
+			}
+		},
+
+		{
+			route: {
+				path: '/ping',
+				method: 'GET',
+				config: {
+					tags: ['api', 'system'],
+					auth: false,
+					description: 'API ping',
+					handler: function (request, reply) {
+						return reply().code(204);
 					}
 				}
 			}

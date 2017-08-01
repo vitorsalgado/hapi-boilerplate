@@ -8,7 +8,7 @@ const Config = require('./src/config');
 const UUID = require('uuid');
 const UUIDv5 = require('uuid/v5');
 const FileSystem = require('fs');
-const Readline = require('readline');
+const RL = require('readline');
 const Stream = require('stream');
 const Path = require('path');
 const Request = require('request-promise');
@@ -40,7 +40,7 @@ Program
 	.description('get changelog entry for latest version and parse to Slack Markdown format')
 	.action(() => {
 		const inputStream = FileSystem.createReadStream(Path.resolve('./CHANGELOG.md'));
-		const readInterface = Readline.createInterface(inputStream, new Stream());
+		const readInterface = RL.createInterface(inputStream, new Stream());
 
 		let latestChangelog = '';
 		let emptySpacesFound = 0;

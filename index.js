@@ -43,7 +43,7 @@ Logger.debug(`Version:	${Config.version}`);
 Logger.debug(`Env:		${Config.environment}`);
 Logger.debug(`Server:		${Config.server.host}:${Config.server.port}`);
 Logger.debug(`MongoDB:	${Config.mongoDB.useReplicaSet ? Config.mongoDB.replicaURI : Config.mongoDB.uri}`);
-Logger.debug('');
+Logger.debug();
 
 Promise.all(
 	[
