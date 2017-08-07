@@ -1,79 +1,38 @@
 'use strict';
 
 const Config = require('../../config');
-const Parser = require('./parser');
+const Levels = require('./levels');
+const Colors = require('./colors');
+const LogBuilder = require('./logBuilder');
 
-const UUID = require('uuid');
-const Moment = require('moment');
+let debugFunc = () => { /* the default for production environments is to do nothing */ };
+let parser = (data) => JSON.stringify(data);
+let stdOutFunc = (data) => console.log(parser(data));
 
-const colors = {
-	green: '\x1b[32m',
-	yellow: '\x1b[33m',
-	red: '\x1b[31m',
-	cyan: '\x1b[36m',
-	blue: '\x1b[34m',
-	default: '\x1b[0m'
-};
-
-let debugFunc = () => { /* the default for production environments is do nothing */ };
+let stdErrFunc = (data) => console.error(parser(data));
 
 if (!Config.isProduction) {
-	debugFunc = (data) => console.log(`${colors.green}${data || ''}${colors.default}`);
+	debugFunc = (data) => console.log(data || '');
+	parser = (data, level) => `${JSON.stringify(data, 4, 4)}`;
+	stdOutFunc = (data) => console.log(`${Colors[data.level]}${parser(data)}${Colors.default}`);
+	stdErrFunc = (data) => console.error(`${Colors[data.level]}${parser(data)}${Colors.default}`);
 }
 
 module.exports.debug = debugFunc;
 
-module.exports.info = (data) => console.log(`${colors.cyan}${Parser.log(data)}${colors.default}`);
+module.exports.info = (event, data, traceId) => logToStdOut(LogBuilder.build(Levels.INFO, data, { event: event }, traceId));
 
-module.exports.error =
-	module.exports.warn =
-		(data) => {
-			const log = setCommonFields(data);
+module.exports.warn = (err, opts, traceId) => logToStdErr(LogBuilder.build(Levels.WARN, err, opts, traceId));
 
-			console.error(`${colors.red}${Parser.parse(log)}${colors.default}`);
+module.exports.error = (err, opts, traceId) => logToStdErr(LogBuilder.build(Levels.ERROR, err, opts, traceId));
 
-			return log.traceID;
-		};
-
-module.exports.buildHttpErr = (request, response) => {
-	const { uri: { href } = {} } = request;
-	const { auth: { isAuthenticated } = {} } = request;
-
-	return {
-		traceID: UUID.v4(),
-		request: {
-			url: href,
-			headers: request.headers,
-			method: request.method,
-			payload: request.payload || undefined,
-			isAuthenticated: isAuthenticated,
-			correlationID: request.defs.correlationID
-		},
-		response: {
-			statusCode: response.statusCode,
-			code: response.output.payload.code,
-			message: response.message,
-			error: response.output.payload.error
-		},
-		stack: response.stack
-	};
+module.exports.panic = (err, opts, traceId) => {
+	logToStdErr(LogBuilder.build(Levels.FATAL, err, opts, traceId));
+	process.nextTick(() => process.exit(1));
 };
 
-const setCommonFields = (data) => {
-	let d = Object.assign({}, data);
+module.exports.httpErr = (request, response, traceId) => logToStdErr(LogBuilder.buildHttpErr(request, response, traceId));
 
-	if (data instanceof Error) {
-		d.stack = data;
-	}
+const logToStdOut = (data) => Config.isTest || stdOutFunc(data);
 
-	d.traceID = UUID.v4();
-	d.createdAt = Moment().format('DD-MM-YYYY HH:mm:ss');
-
-	d.server = {
-		version: Config.version,
-		env: Config.environment,
-		pid: process.pid
-	};
-
-	return d;
-};
+const logToStdErr = (data) => Config.isTest || stdErrFunc(data);

@@ -1,7 +1,11 @@
 'use strict';
 
 const Schemas = require('./system.schemas');
-const Controller = require('./system.controller');
+
+const Mongoose = require('mongoose');
+const Config = require('../../config');
+
+const MONGODB_CONNECTED_STATUS = 1;
 
 module.exports = function () {
 	return [
@@ -13,7 +17,16 @@ module.exports = function () {
 					tags: ['api', 'system'],
 					auth: false,
 					description: 'API health check',
-					handler: Controller.healthCheck,
+					handler: function (request, reply) {
+						return reply({
+							status: 'OK',
+							version: Config.version,
+							env: Config.environment,
+							mongodb: {
+								status: makeStatus(() => Mongoose.connection.readyState === MONGODB_CONNECTED_STATUS)
+							}
+						});
+					},
 					response: {
 						status: { 200: Schemas.healthCheck }
 					}
@@ -37,3 +50,5 @@ module.exports = function () {
 		}
 	];
 };
+
+const makeStatus = (predicate) => predicate() ? 'OK' : 'NOK';

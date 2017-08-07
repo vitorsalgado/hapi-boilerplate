@@ -60,7 +60,7 @@ server.ext('onPreResponse', function (request, reply) {
 		return reply.continue();
 	}
 
-	const traceID = Logger.error(Logger.buildHttpErr(request, response));
+	Logger.httpErr(request, response, correlationID);
 
 	const { isJoi = false } = response.data || {};
 	const { code = 0 } = response;
@@ -68,8 +68,8 @@ server.ext('onPreResponse', function (request, reply) {
 	response.output.statusCode = response.statusCode || response.output.statusCode;
 	response.output.payload.message = response.message;
 	response.output.payload.code = code;
-	response.output.payload.type = response.type || response.output.payload.error;
-	response.output.payload.trace_id = traceID;
+	response.output.payload.type = response.type || response.constructor.name;
+	response.output.payload.trace_id = correlationID;
 
 	if (isJoi) {
 		response.output.payload.errors = ServerUtils.parseJoiErrors(response.data);

@@ -4,9 +4,9 @@ const Joi = require('joi');
 const Path = require('path');
 const FileUtils = require('../libs/fileUtils');
 const ErrorSchemas = require('./errSchemas');
-const ErrCodes = require('../libs/error/errCodes');
 
-const { handleByVersion } = require('../libs/routeUtils');
+const { errCodes } = require('../libs/error');
+const { handleByVersion } = require('../libs/routing/routeUtils');
 
 const ROUTES_PATH = Path.join(__dirname);
 
@@ -24,9 +24,9 @@ const setDefaults = (route) => {
 	}
 
 	if (route.bind) {
-		Object.assign(route.config.bind, ErrCodes);
+		Object.assign(route.config.bind, errCodes);
 	} else {
-		route.config.bind = { ErrCodes };
+		route.config.bind = { errCodes };
 	}
 
 	if (!route.config.validate) {

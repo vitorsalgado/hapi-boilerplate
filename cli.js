@@ -21,14 +21,27 @@ if (argv.length <= 2) {
 	argv.push('--help');
 }
 
+const VERSION = Package.version;
+
+/*
+ Travis CI specific environment vars
+ */
+const COMMIT_MESSAGE = process.env.TRAVIS_COMMIT_MESSAGE;
+const BUILD_NUMBER = process.env.TRAVIS_BUILD_NUMBER;
+const BUILD_ID = process.env.TRAVIS_BUILD_ID;
+const BRANCH = process.env.TRAVIS_BRANCH;
+const EVENT_TYPE = process.env.TRAVIS_EVENT_TYPE;
+const USER = process.env.USER;
+const TRAVIS_TEST_RESULT = process.env.TRAVIS_TEST_RESULT;
+
 Program
-	.version(Package.version)
+	.version(VERSION)
 	.description('Utilities CLI Tool for development and Ci/Cd workflow');
 
 Program
 	.command('version')
 	.description('get package version')
-	.action(() => console.log(Package.version));
+	.action(() => console.log(VERSION));
 
 Program
 	.command('uuid')
@@ -60,8 +73,8 @@ Program
 			if (lineIndex === 2) {
 				const version = line.substring(line.lastIndexOf(' ') + 1, line.length);
 
-				if (version !== Package.version) {
-					throw new Error(`Version ${Package.version} does not have an entry in CHANGELOG.md yet!`);
+				if (version !== VERSION) {
+					throw new Error(`Version ${VERSION} does not have an entry in CHANGELOG.md yet!`);
 				}
 			}
 
@@ -95,10 +108,10 @@ Program
 						mrkdwn: true,
 						attachments: [
 							{
-								pretext: `>*Commit*: ${process.env.TRAVIS_COMMIT_MESSAGE}\n>*Triggered by*: ${process.env.TRAVIS_EVENT_TYPE}`,
+								pretext: `>*Commit*: ${COMMIT_MESSAGE}\n>*Triggered by*: ${EVENT_TYPE}`,
 								color: 'good',
-								title: `Build: ${process.env.TRAVIS_BUILD_NUMBER} | By: ${process.env.USER} | Branch: ${process.env.TRAVIS_BRANCH}`,
-								title_link: `https://travis-ci.org/vitorsalgado/hapi-boilerplate/builds/${process.env.TRAVIS_BUILD_ID}`,
+								title: `Build: ${BUILD_NUMBER} | By: ${USER} | Branch: ${BRANCH}`,
+								title_link: `https://travis-ci.org/vitorsalgado/hapi-boilerplate/builds/${BUILD_ID}`,
 								mrkdwn_in: ['text', 'pretext'],
 								text: data.toString()
 							},
@@ -128,14 +141,14 @@ Program
 					attachments: [
 						{
 							color: 'danger',
-							text: `*Commit*: ${process.env.TRAVIS_COMMIT_MESSAGE}\nSomething went wrong during the last deployment!.\nNavigate with the link for more details.`,
-							title: `Build: ${process.env.TRAVIS_BUILD_NUMBER} | By: ${process.env.USER} | Branch: ${process.env.TRAVIS_BRANCH}`,
-							title_link: `https://travis-ci.org/vitorsalgado/hapi-boilerplate/builds/${process.env.TRAVIS_BUILD_ID}`,
+							text: `*Commit*: ${COMMIT_MESSAGE}\nSomething went wrong during the last deployment!.\nNavigate with the link for more details.`,
+							title: `Build: ${BUILD_NUMBER} | By: ${USER} | Branch: ${BRANCH}`,
+							title_link: `https://travis-ci.org/vitorsalgado/hapi-boilerplate/builds/${BUILD_ID}`,
 							mrkdwn_in: ['text', 'pretext']
 						},
 						{
 							color: 'warning',
-							title: `Test Result: ${process.env.TRAVIS_TEST_RESULT}`
+							title: `Test Result: ${TRAVIS_TEST_RESULT}`
 						}
 					]
 				},

@@ -2,31 +2,21 @@
 
 require('dotenv').config();
 
-const Server = require('./src/server');
-const MongoDB = require('./src/libs/mongoDB');
+const UUID = require('uuid');
 
-const Config = require('./src/config');
+const Server = require('./src/server');
+const ServerUtils = require('./src/libs/serverUtils');
+const MongoDB = require('./src/libs/mongoDB');
 const Logger = require('./src/libs/logger');
 const ConfigSchema = require('./src/config/schema');
+const Config = require('./src/config');
 
-function restInPeace () {
-	Server.get().root.stop({ timeout: Config.server.stopTimeout }, (err) =>
-		MongoDB.disconnect()
-			.then(() => {
-				if (err) {
-					Logger.error(err);
-				}
+const traceID = UUID.v4();
 
-				process.exit(err ? 1 : 0);
-			})
-			.catch((err) => {
-				Logger.error(err);
-				process.exit(1);
-			}));
-}
-
-process.on('SIGTERM', restInPeace);
-process.on('SIGINT', restInPeace);
+process.on('SIGTERM', ServerUtils.restInPeace(traceID));
+process.on('SIGINT', ServerUtils.restInPeace(traceID));
+process.on('uncaughtException', (err) => Logger.panic(err, {}, traceID));
+process.on('unhandledRejection', (reason, p) => Logger.debug({ message: 'unhandledRejection', reason: reason, p: p }));
 
 Logger.debug(`
     __  __            _    ____        _ __                __      __
@@ -41,7 +31,7 @@ Logger.debug(`
 
 Logger.debug(`Version:	${Config.version}`);
 Logger.debug(`Env:		${Config.environment}`);
-Logger.debug(`Server:		${Config.server.host}:${Config.server.port}`);
+Logger.debug(`Server:		${Server.get().info.host}:${Server.get().info.port}`);
 Logger.debug(`MongoDB:	${Config.mongoDB.useReplicaSet ? Config.mongoDB.replicaURI : Config.mongoDB.uri}`);
 Logger.debug();
 
@@ -52,11 +42,9 @@ Promise.all(
 		Server.start()
 	])
 	.then(() => {
-		Logger.debug('API is online and waiting for requests ...');
+		Logger.info('START', 'API is online', traceID);
 	})
 	.catch((err) => {
 		Logger.debug('Fatal exception on startup! Server will finish ...');
-		Logger.error(err);
-
-		process.exit(-1);
+		Logger.panic(err, {}, traceID);
 	});

@@ -7,16 +7,12 @@
 		"start": "pm2 start ecosystem.config.js --no-daemon",
 		"start-docker": "pm2-docker ecosystem.config.js --no-daemon | node ./src/logger",
 		"start-dev": "nodemon --ignore envs/ --ignore __tests__/ --ignore docs/",
-
 		"dev": "npm run start-dev",
-
 		"test": "jest --coverage",
 		"test-watch": "jest --watch -o",
 		"test-acceptance": "yarn start && yarn ./__test/acceptance_tests",
 		"coveralls": "cat reports/coverage/lcov.info | ./node_modules/.bin/coveralls",
-
 		"lint": "eslint ./src ./__tests__",
-		
 		"security-checkup": "snyk protect && nsp check --output summary"
 	},
 	"engines": {
@@ -51,12 +47,13 @@
 		"good": "^7.2.0",
 		"good-console": "^6.4.0",
 		"good-squeeze": "^5.0.2",
-		"hapi": "16.4.3",
+		"hapi": "^16.5.2",
 		"hapi-auth-hawk": "^3.0.1",
 		"hapi-swaggered": "^2.10.0",
 		"hapi-swaggered-ui": "^2.6.0",
 		"inert": "^4.2.1",
 		"joi": "^10.6.0",
+		"lodash": "^4.17.4",
 		"moment": "^2.18.1",
 		"mongoose": "^4.11.5",
 		"pm2": "^2.6.1",
@@ -69,7 +66,7 @@
 		"codeclimate-test-reporter": "^0.5.0",
 		"commander": "^2.11.0",
 		"coveralls": "^2.13.1",
-		"eslint": "^4.3.0",
+		"eslint": "^4.4.0",
 		"eslint-config-nodesecurity": "^1.3.1",
 		"eslint-config-standard": "^10.2.1",
 		"eslint-plugin-import": "^2.7.0",
@@ -82,16 +79,30 @@
 		"nsp": "^2.7.0",
 		"prettier": "^1.5.3",
 		"semver": "^5.4.1",
-		"snyk": "^1.37.0",
+		"snyk": "^1.38.1",
 		"supertest": "^3.0.0"
 	},
 	"jest": {
 		"notify": false,
+		"verbose": true,
 		"coverageDirectory": "reports/coverage",
 		"clearMocks": true,
+		"resetMocks": true,
 		"testEnvironment": "node",
+		"coverageThreshold": {
+			"global": {
+				"branches": 45,
+				"functions": 45,
+				"lines": 70,
+				"statements": 70
+			}
+		},
 		"collectCoverageFrom": [
 			"src/**/*.js"
+		],
+		"coveragePathIgnorePatterns": [
+			"/node_modules/",
+			"<rootDir>/src/config/"
 		],
 		"testMatch": [
 			"**/?(*.)(spec|test).js?(x)"

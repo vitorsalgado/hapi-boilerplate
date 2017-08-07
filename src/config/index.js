@@ -4,7 +4,7 @@ const Package = require('../../package.json');
 
 module.exports = {
 	version: Package.version,
-	environment: process.env.NODE_ENV,
+	environment: process.env.NODE_ENV || 'not_set',
 	namespace: 'br.com.hapiboilerplate',
 
 	isProduction: process.env.NODE_ENV === 'production',

@@ -23,7 +23,7 @@ module.exports = {
 		info: {
 			title: 'Hapi Boilerplate Documentation',
 			version: Config.version,
-			description: `Hapi boilerplate application and library with initial configurations ready.`
+			description: `Hapi boilerplate application with initial configurations ready.`
 		}
 	}
 };

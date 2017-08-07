@@ -9,8 +9,8 @@ const ApplicationSchema = new Mongoose.Schema({
 	name: String
 });
 
-ApplicationSchema.statics.findStrict = function (qry) {
-	this.findOne(qry).exec()
+ApplicationSchema.statics.getByIDAndGrantType = function (clientID, grantType) {
+	this.findOne({ clientID: clientID, grantTypes: grantType }).exec()
 		.then((app) => {
 			if (!app) {
 				throw new Error('application not found');

@@ -2,7 +2,8 @@
 
 const Config = require('../../config');
 const HttpClient = require('../../libs/httpClient');
-const Codes = require('../../libs/error/errCodes');
+
+const ErrCodes = require('../../libs/error/errCodes');
 const ErrHandler = require('../../libs/error/errHandler');
 
 const FORMAT_JSON = 'json';
@@ -16,6 +17,6 @@ module.exports.me = (accessToken, ...fields) =>
 		})
 		.catch((err) =>
 			ErrHandler.err(err)
-				.msg(err.error.error.message)
-				.code(Codes.ERR_AUTH).type(Codes.TYPE_FACEBOOK_ERR)
+				.badRequestFromCode(ErrCodes.ERR_AUTH, ErrCodes.TYPE_FACEBOOK_ERR)
+				.msgFromPath('error.error.message')
 				.throw());

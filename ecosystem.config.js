@@ -3,12 +3,12 @@
 module.exports = {
 	apps: [
 		{
-			name: 'hapi-boilerplate',
+			name: 'api',
 			script: 'index.js',
 			instances: 1,
 			exec_mode: 'cluster',
 			restart_delay: 10000,
-			error_file: './logs/error.log',
+			error_file: './logs/output.log',
 			out_file: './logs/output.log',
 			merge_logs: true
 		}

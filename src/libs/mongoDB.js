@@ -7,7 +7,7 @@ Mongoose.Promise = global.Promise;
 
 module.exports.connect = () => Mongoose.connect(Config.mongoDB.uri, getConfig());
 
-module.exports.disconnect = () => !Mongoose.connection || Mongoose.connection.close();
+module.exports.disconnect = () => Mongoose.disconnect();
 
 const getConfig = () => {
 	if (Config.mongoDB.useReplicaSet) {

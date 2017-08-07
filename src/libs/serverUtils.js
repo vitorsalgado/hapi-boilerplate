@@ -1,5 +1,10 @@
 'use strict';
 
+const Server = require('../server');
+const Logger = require('../libs/logger');
+const MongoDB = require('../libs/mongoDB');
+const Config = require('../config');
+
 module.exports.parseJoiErrors = (data) =>
 	data.details.map((detail) => {
 		return {
@@ -17,6 +22,24 @@ module.exports.buildDevErr = (response) => {
 	}
 
 	return stack;
+};
+
+module.exports.restInPeace = (traceID) => () => {
+	Server.get().root.stop({ timeout: Config.server.stopTimeout }, (err) =>
+		MongoDB.disconnect()
+			.then(() => {
+				if (err) {
+					Logger.error(err, null, traceID);
+					process.exit(1);
+				}
+
+				Logger.info('STOP', 'API stopped', traceID);
+				process.exit();
+			})
+			.catch((err) => {
+				Logger.error(err, null, traceID);
+				process.exit(1);
+			}));
 };
 
 module.exports.removeUnusedFields = (response) => {

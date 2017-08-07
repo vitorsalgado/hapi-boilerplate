@@ -2,8 +2,18 @@
 
 'use strict';
 
+/**
+ * @module FileUtils
+ */
+
 const FileSystem = require('fs');
 
+/**
+ * Reads an directory tree recussively and syncronous
+ * @param {string} dir - directory to start ready recursively
+ * @param {function} predicate - predicate function to execute with each file
+ * @returns {string[]} array with all files which passed on predicate
+ */
 const readDirRecursiveSync = (dir, predicate) => {
 	let results = [];
 	const directories = FileSystem.readdirSync(dir);

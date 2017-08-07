@@ -2,6 +2,12 @@
 
 const Joi = require('joi');
 
+const strFieldForPwdGrantType = Joi.string().when('grant_type', {
+	is: 'password',
+	then: Joi.required(),
+	otherwise: Joi.optional()
+});
+
 module.exports.authentication = Joi.object(
 	{
 		client_id: Joi.string().required(),
@@ -12,16 +18,8 @@ module.exports.authentication = Joi.object(
 			then: Joi.required(),
 			otherwise: Joi.optional()
 		}),
-		username: Joi.string().when('grant_type', {
-			is: 'password',
-			then: Joi.required(),
-			otherwise: Joi.optional()
-		}),
-		password: Joi.string().when('grant_type', {
-			is: 'password',
-			then: Joi.required(),
-			otherwise: Joi.optional()
-		})
+		username: strFieldForPwdGrantType,
+		password: strFieldForPwdGrantType
 	})
 	.meta({ className: 'OAuth' })
 	.label('OAuth');

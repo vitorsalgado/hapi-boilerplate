@@ -14,6 +14,9 @@ module.exports = function () {
 					auth: false,
 					description: 'Authentication',
 					validate: { payload: Schemas.authentication },
+					payload: {
+						allow: 'application/x-www-form-urlencoded'
+					},
 					handler: function (request, reply) {
 						return OauthService.authenticate(request.payload)
 							.then(reply);
